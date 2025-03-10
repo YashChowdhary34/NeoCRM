@@ -4,8 +4,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-app.get("/api/test", (request, response) => {
-  response.json({ message: "Backend is working!" });
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Backend is working!" });
 });
 
 app.listen(PORT, () => {
