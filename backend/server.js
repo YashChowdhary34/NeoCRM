@@ -1,5 +1,9 @@
 const { default: axios } = require("axios");
 const express = require("express");
+
+const authRoutes = require("./routes/authRoutes");
+const authMiddleware = require("./middleware/authMiddleware");
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -71,6 +75,13 @@ app.get("/api/ai/sentiment", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+// auth routes
+app.use("/api/auth", authRoutes);
+
+app.get("/api/protected", authMiddleware, (req, res) => {
+  res.json({ message: `Hello ${req.user.username}, you are authorized!` });
 });
 
 // listen to endpoint
