@@ -1,0 +1,51 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+    pull_request:
+      branches: -master
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:20
+        options: --privileged
+        ports:
+          - 3000:3000
+          - 5000:5000
+          - 8080:8080
+          - 8000:8000
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and Test Frontend
+        run: |
+          cd backend
+          npm install
+          npm run test
+
+      - name: Test Go DB Service
+        run: |
+          cd db
+          go run main.go
+
+      - name: Test AI Microservices
+        run: |
+          cd ai
+          pip install -r requirements.txt
+          pytest
+
+      - name: Build Docker Images
+        run: docker-compose build
