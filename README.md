@@ -1,4 +1,8 @@
-# MERN-Go-AI-Admin Project
+# NeoCRM
+
+## Introduction
+
+NeoCRM is a opensource CRM platform with a ton of AI features.
 
 ## Overview
 
